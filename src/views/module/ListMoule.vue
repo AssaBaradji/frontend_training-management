@@ -1,4 +1,4 @@
-<!-- import { defineStore } from "pinia";
+import { defineStore } from "pinia";
 import axios from "axios";
 
 const API_BASE_URL = "http://localhost:3004/modules"; // Remplacez par votre URL de backend
@@ -52,7 +52,7 @@ export default defineStore("moduleStore", {
       }
     },
   },
-}); -->
+});
 
 <template>
   <div>
