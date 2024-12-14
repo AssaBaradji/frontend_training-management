@@ -4,6 +4,7 @@ import ListStudent from "@/views/student/ListStudent.vue";
 import AddStudent from "../views/student/AddStudent.vue";
 import EditStudent from "../views/student/EditStudent.vue";
 import ListModule from "../views/module/ListMoule.vue";
+import AddModule from "../views/module/AddModule.vue";
 
 
 
@@ -19,6 +20,7 @@ const routes = [
             { path: "Add-Student", name: "AddStudent", component: AddStudent},
             { path: "edit-student/:id", name: "editStudent", component: EditStudent },
             { path: "list-module", name: "listModule", component: ListModule },
+            { path: "Add-module", name: "addModule", component: AddModule },
 
          
         ],
