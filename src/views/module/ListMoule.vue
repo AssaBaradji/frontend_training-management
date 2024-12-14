@@ -69,7 +69,8 @@ import useModuleStore from "@/store/moduleStore";
 
 const toast = useToast();
 const router = useRouter();
-const { modules, loadModules, updateModule, deleteModule: storeDeleteModule } = useModuleStore();
+const store = useModuleStore();
+const { modules, loadModules, deleteModule: storeDeleteModule } = store;
 
 const showDeleteModal = ref(false);
 const moduleToDelete = ref(null);
@@ -77,7 +78,8 @@ const moduleToDelete = ref(null);
 // Load modules on component mount
 onMounted(async () => {
     try {
-        await loadModules();
+        // Initialize store to load data from localStorage or backend
+        store.init();
     } catch (error) {
         toast.error("Error while loading modules.");
     }
@@ -115,6 +117,7 @@ const deleteModule = async () => {
     try {
         await storeDeleteModule(moduleToDelete.value);
         toast.success("Module deleted successfully!");
+        store.loadModules(); // Reload modules from backend/localStorage
     } catch (error) {
         toast.error("Error while deleting module.");
     } finally {
