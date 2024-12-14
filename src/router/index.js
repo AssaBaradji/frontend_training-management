@@ -3,6 +3,8 @@ import Dashboard from "../Dashbord.vue";
 
 import ListStudent from "@/views/student/ListStudent.vue";
 import AddStudent from "../views/student/AddStudent.vue";
+import ListRegistration from "@/views/registration/ListRegistration.vue";
+// import AddRegistration from "@/views/registration/AddRegistration.vue";
 
 
 
@@ -16,6 +18,9 @@ const routes = [
         children: [
             { path: "list-Student", name: "listStudent", component: ListStudent },
             { path: "Add-Student", name: "AddStudent", component: AddStudent},
+            { path: "list-Registration", name: "listRegistration", component: ListRegistration },
+            // { path: "Add-Registration", name: "AddRegistration", component: AddRegistration}
+            
          
         ],
     },
