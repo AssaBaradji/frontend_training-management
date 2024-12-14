@@ -5,6 +5,8 @@ import AddStudent from "../views/student/AddStudent.vue";
 import EditStudent from "../views/student/EditStudent.vue";
 import ListModule from "../views/module/ListModule.vue";
 import AddModule from "../views/module/AddModule.vue";
+import EditModule from "../views/module/EditModule.vue";
+import ShowModule from "../views/module/ShowModule.vue";
 
 
 
@@ -21,6 +23,8 @@ const routes = [
             { path: "edit-student/:id", name: "editStudent", component: EditStudent },
             { path: "list-module", name: "listModule", component: ListModule },
             { path: "Add-module", name: "addModule", component: AddModule },
+            { path: "edit-module/:id", name: "editModule", component: EditModule },
+            { path: "show-module/:id", name: "showModule", component: ShowModule },
 
          
         ],
