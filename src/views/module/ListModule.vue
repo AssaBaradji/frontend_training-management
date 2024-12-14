@@ -1,63 +1,63 @@
 <template>
   <div>
-    <!-- Title -->
-    <h4 class="mb-4">Module Management</h4>
+      <!-- Title -->
+      <h4 class="mb-4">Module List</h4>
 
-    <!-- Add Module Button -->
-    <div class="text-end mb-4">
-      <button class="btn btn-primary btn-sm fw-bold" @click="navigate('AddModule')">
-        <i class="fa fa-plus me-1"></i> Add Module
-      </button>
-    </div>
-
-    <!-- Module Table -->
-    <div class="table-responsive shadow-sm rounded bg-white p-3 mt-3">
-      <table class="table table-hover table-borderless align-middle text-center">
-        <thead class="table-light small-header">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Duration (hours)</th>
-            <th scope="col">Price ($)</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="modules.length === 0">
-            <td colspan="5" class="text-danger fw-bold">No modules found</td>
-          </tr>
-          <tr v-for="(module, index) in modules" :key="module.id">
-            <td>{{ index + 1 }}</td>
-            <td>{{ module.name }}</td>
-            <td>{{ module.duration }}</td>
-            <td>{{ module.price.toFixed(2) }}</td>
-            <td>
-              <button class="btn btn-sm btn-primary me-2" @click="editModule(module)">
-                <i class="fa fa-edit"></i> Edit
-              </button>
-              <button class="btn btn-sm btn-danger me-2" @click="confirmDeleteModule(module.id)">
-                <i class="fa fa-trash"></i> Delete
-              </button>
-              <button class="btn btn-sm btn-info" @click="viewModule(module)">
-                <i class="fa fa-eye"></i> View
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div v-if="showDeleteModal" class="modal-overlay">
-      <div class="modal-content">
-        <h5>Confirmation</h5>
-        <p>Are you sure you want to delete this module?</p>
-        <div class="modal-buttons">
-          <button class="btn btn-secondary" @click="closeDeleteModal">Cancel</button>
-          <button class="btn btn-danger" @click="deleteModule">Delete</button>
-        </div>
+      <!-- Add Module Button -->
+      <div class="text-end mb-4">
+          <button class="btn btn-primary btn-sm fw-bold" @click="navigate('addModule')">
+              <i class="fa fa-plus me-1"></i> Add Module
+          </button>
       </div>
-    </div>
+
+      <!-- Module Table -->
+      <div class="table-responsive shadow-sm rounded bg-white p-3 mt-3">
+          <table class="table table-hover table-borderless align-middle text-center">
+              <thead class="table-light small-header">
+                  <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Duration (hours)</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-if="modules.length === 0">
+                      <td colspan="5" class="text-danger fw-bold">No modules found</td>
+                  </tr>
+                  <tr v-for="(module, index) in modules" :key="module.id">
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ module.name }}</td>
+                      <td>{{ module.duration }}</td>
+                      <td>{{ module.price }}</td>
+                      <td>
+                          <button class="btn btn-sm btn-info me-2" @click="viewModule(module)">
+                              <i class="fa fa-eye"></i>
+                          </button>
+                          <button class="btn btn-sm btn-warning me-2" @click="editModule(module)">
+                              <i class="fa fa-edit"></i>
+                          </button>
+                          <button class="btn btn-sm btn-danger me-2" @click="confirmDeleteModule(module.id)">
+                              <i class="fa fa-trash"></i>
+                          </button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+      <!-- Confirmation Modal -->
+      <div v-if="showDeleteModal" class="modal-overlay">
+          <div class="modal-content">
+              <h5>Confirmation</h5>
+              <p>Are you sure you want to delete this module?</p>
+              <div class="modal-buttons">
+                  <button class="btn btn-secondary" @click="closeDeleteModal">Cancel</button>
+                  <button class="btn btn-danger" @click="deleteModule">Delete</button>
+              </div>
+          </div>
+      </div>
   </div>
 </template>
 
@@ -77,9 +77,9 @@ const moduleToDelete = ref(null);
 // Load modules on component mount
 onMounted(async () => {
   try {
-    await loadModules();
+      await loadModules();
   } catch (error) {
-    toast.error("Error while loading modules.");
+      toast.error("Error while loading modules.");
   }
 });
 
@@ -113,12 +113,12 @@ const closeDeleteModal = () => {
 // Delete module
 const deleteModule = async () => {
   try {
-    await storeDeleteModule(moduleToDelete.value);
-    toast.success("Module deleted successfully!");
+      await storeDeleteModule(moduleToDelete.value);
+      toast.success("Module deleted successfully!");
   } catch (error) {
-    toast.error("Error while deleting module.");
+      toast.error("Error while deleting module.");
   } finally {
-    closeDeleteModal();
+      closeDeleteModal();
   }
 };
 </script>
@@ -134,7 +134,7 @@ const deleteModule = async () => {
 
 @media (max-width: 768px) {
   .responsive-hide {
-    display: none;
+      display: none;
   }
 }
 

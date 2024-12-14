@@ -2,13 +2,18 @@
   <div>
     <h4 class="mb-4">List of Registrations</h4>
     <div class="text-end mb-4">
-      <button class="btn btn-primary btn-sm" @click="navigate('AddRegistration')">
+      <button
+        class="btn btn-primary btn-sm"
+        @click="navigate('AddRegistration')"
+      >
         <i class="fa fa-plus me-1"></i> Add Registration
       </button>
     </div>
 
     <div class="table-responsive shadow-sm rounded bg-white p-3 mt-3">
-      <table class="table table-hover table-borderless align-middle text-center">
+      <table
+        class="table table-hover table-borderless align-middle text-center"
+      >
         <thead class="table-light small-header">
           <tr>
             <th>#</th>
@@ -17,28 +22,45 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Amount</th>
+            <th>Remaining Amount</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="registrations.length === 0">
-            <td colspan="7" class="text-danger fw-bold">No registrations found</td>
+            <td colspan="7" class="text-danger fw-bold">
+              No registrations found
+            </td>
           </tr>
-          <tr v-for="(registration, index) in registrations" :key="registration.id">
+          <tr
+            v-for="(registration, index) in registrations"
+            :key="registration.id"
+          >
             <td>{{ index + 1 }}</td>
             <td>{{ getStudentName(registration.studentId) }}</td>
             <td>{{ getModuleName(registration.moduleId) }}</td>
             <td>{{ formatDate(registration.startDate) }}</td>
             <td>{{ formatDate(registration.endDate) }}</td>
             <td>{{ registration.amount }} €</td>
+            <td>{{ registration.remainingAmount }} €</td>
+
             <td>
-              <button class="btn btn-sm btn-info me-2" @click="viewRegistration(registration)">
+              <button
+                class="btn btn-sm btn-info me-2"
+                @click="viewRegistration(registration)"
+              >
                 <i class="fa fa-eye"></i>
               </button>
-              <button class="btn btn-sm btn-warning me-2" @click="editRegistration(registration)">
+              <button
+                class="btn btn-sm btn-warning me-2"
+                @click="editRegistration(registration)"
+              >
                 <i class="fa fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-danger" @click="confirmDeleteRegistration(registration.id)">
+              <button
+                class="btn btn-sm btn-danger"
+                @click="confirmDeleteRegistration(registration.id)"
+              >
                 <i class="fa fa-trash"></i>
               </button>
             </td>
@@ -53,7 +75,9 @@
         <p>Are you sure you want to delete this registration?</p>
         <div class="modal-buttons">
           <button class="btn btn-secondary" @click="closeModal">Cancel</button>
-          <button class="btn btn-danger" @click="deleteRegistration">Delete</button>
+          <button class="btn btn-danger" @click="deleteRegistration">
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -64,12 +88,11 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import useRegistrationStore from "../../store/regsitrationStore.js";
+import useRegistrationStore from "../../store/registrationStore.js";
 
 const router = useRouter();
 const toast = useToast();
 
-// Load registrations, students, and modules
 const {
   registrations,
   students,
@@ -83,38 +106,30 @@ const {
 const showModal = ref(false);
 const registrationToDelete = ref(null);
 
-// Function to format a date
-const formatDate = (date) => new Date(date).toLocaleDateString();
-
-// Get the student's name by ID
-const getStudentName = (studentId) => {
-  const student = students.find((student) => student.id === studentId);
-  return student ? student.name : "Unknown";
-};
-
-// Get the module's name by ID
-const getModuleName = (moduleId) => {
-  const module = modules.find((module) => module.id === moduleId);
-  return module ? module.name : "Unknown";
-};
-
-// Load data on component mount
 onMounted(async () => {
   try {
     await Promise.all([loadRegistrations(), loadStudents(), loadModules()]);
-  } catch {
-    toast.error("Error loading data.");
+  } catch (error) {
+    toast.error("Error while loading data.");
   }
 });
 
-// Navigation
-const navigate = (routeName) => router.push({ name: routeName });
-const viewRegistration = (registration) =>
-  router.push({ name: "viewRegistration", params: { id: registration.id } });
-const editRegistration = (registration) =>
-  router.push({ name: "editRegistration", params: { id: registration.id } });
+const formatDate = (date) => new Date(date).toLocaleDateString();
 
-// Confirm delete registration
+const getStudentName = (studentId) => {
+  const student = students.value.find((s) => s.id === studentId);
+  return student ? student.fullName : "Unknown";
+};
+
+const getModuleName = (moduleId) => {
+  const module = modules.value.find((m) => m.id === moduleId);
+  return module ? module.name : "Unknown";
+};
+
+const navigate = (routeName) => {
+  router.push({ name: routeName });
+};
+
 const confirmDeleteRegistration = (id) => {
   registrationToDelete.value = id;
   showModal.value = true;
@@ -125,15 +140,22 @@ const closeModal = () => {
   registrationToDelete.value = null;
 };
 
-// Delete registration
 const deleteRegistration = async () => {
-  try {
-    await storeDeleteRegistration(registrationToDelete.value);
-    toast.success("Registration deleted successfully!");
-  } catch {
-    toast.error("Error deleting registration.");
-  } finally {
-    closeModal();
+  const isConfirmed = window.confirm(
+    "Are you sure you want to delete this registration?"
+  );
+
+  if (isConfirmed) {
+    try {
+      await storeDeleteRegistration(registrationToDelete.value);
+      toast.success("Registration deleted successfully!");
+    } catch (error) {
+      toast.error("Error while deleting the registration.");
+    } finally {
+      closeModal();
+    }
+  } else {
+    toast.info("Registration deletion canceled.");
   }
 };
 </script>
