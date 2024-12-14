@@ -1,77 +1,142 @@
 <template>
-    <div>
-      <!-- Add Student Form -->
-      <h4 class="mb-4">Add New Student</h4>
-      <form @submit.prevent="submitForm" class="bg-white p-4 shadow-sm rounded">
+  <div class="container mt-1">
+    <div class="col-md-8 mx-auto">
+      <h1 class="h4 text-primary mb-4 text-center">Add New Student</h1>
+
+      <!-- Affichage des erreurs globales du backend -->
+      <div v-if="studentStore.error" class="alert alert-danger">
+        <p>{{ studentStore.error }}</p>
+      </div>
+
+      <form @submit.prevent="submitForm">
+        <!-- Full Name -->
         <div class="mb-3">
           <label for="fullName" class="form-label">Full Name</label>
-          <input type="text" id="fullName" v-model="newStudent.fullName" class="form-control" required />
+          <input type="text" id="fullName" v-model="form.fullName" class="form-control"
+            :class="{ 'is-invalid': errors.fullName }" required />
+          <div v-if="errors.fullName" class="invalid-feedback">{{ errors.fullName }}</div>
         </div>
+
+        <!-- Phone Number -->
         <div class="mb-3">
           <label for="phoneNumber" class="form-label">Phone Number</label>
-          <input type="tel" id="phoneNumber" v-model="newStudent.phoneNumber" class="form-control" required />
+          <input type="tel" id="phoneNumber" v-model="form.phoneNumber" class="form-control"
+            :class="{ 'is-invalid': errors.phoneNumber }" required />
+          <div v-if="errors.phoneNumber" class="invalid-feedback">{{ errors.phoneNumber }}</div>
         </div>
+
+        <!-- Email -->
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" id="email" v-model="newStudent.email" class="form-control" required />
+          <input type="email" id="email" v-model="form.email" class="form-control"
+            :class="{ 'is-invalid': errors.email }" required />
+          <div v-if="errors.email" class="invalid-feedback">{{ errors.email }}</div>
         </div>
+
+        <!-- Address -->
         <div class="mb-3">
           <label for="address" class="form-label">Address</label>
-          <input type="text" id="address" v-model="newStudent.address" class="form-control" />
+          <input type="text" id="address" v-model="form.address" class="form-control"
+            :class="{ 'is-invalid': errors.address }" />
+          <div v-if="errors.address" class="invalid-feedback">{{ errors.address }}</div>
         </div>
+
+        <!-- Tutor -->
         <div class="mb-3">
           <label for="tutor" class="form-label">Tutor</label>
-          <input type="text" id="tutor" v-model="newStudent.tutor" class="form-control" />
+          <input type="text" id="tutor" v-model="form.tutor" class="form-control"
+            :class="{ 'is-invalid': errors.tutor }" />
+          <div v-if="errors.tutor" class="invalid-feedback">{{ errors.tutor }}</div>
         </div>
-        <div class="text-end">
-          <button type="submit" class="btn btn-primary">Add Student</button>
+
+        <!-- Boutons -->
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary" :disabled="isLoading">
+            <span v-if="isLoading">Adding...</span>
+            <span v-else>Add Student</span>
+          </button>
+          <button type="button" class="btn btn-secondary ms-3" @click="navigateBack">
+            Cancel
+          </button>
         </div>
       </form>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from "vue";
-  import { useRouter } from "vue-router";
-  import { useToast } from "vue-toastification";
-  
-  const router = useRouter();
-  const store = useStudentStore();
-  const toast = useToast();
-  
-  const newStudent = ref({
-    fullName: "",
-    phoneNumber: "",
-    email: "",
-    address: "",
-    tutor: "",
-  });
-  
-  // Submit form to add student
-  const submitForm = async () => {
-    try {
-      await store.addStudent(newStudent.value);
-      toast.success("Student added successfully!");
-      router.push({ name: "studentList" });
-    } catch (error) {
-      toast.error("Error while adding the student.");
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .form-label {
-    font-weight: 600;
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import useStudentStore from "@/store/studentStore";
+
+// Dépendances
+const router = useRouter();
+const studentStore = useStudentStore();
+const toast = useToast();
+
+// État local pour le formulaire
+const form = ref({
+  fullName: "",
+  phoneNumber: "",
+  email: "",
+  address: "",
+  tutor: "",
+});
+
+const errors = reactive({
+  fullName: "",
+  phoneNumber: "",
+  email: "",
+  address: "",
+  tutor: "",
+});
+
+// États pour la gestion des erreurs
+const isLoading = ref(false);
+
+// Retour à la liste des étudiants
+const navigateBack = () => router.push({ name: "studentList" });
+
+// Soumission du formulaire d'ajout
+const submitForm = async () => {
+  try {
+    isLoading.value = true;
+    // Réinitialisation des erreurs
+    Object.keys(errors).forEach((key) => (errors[key] = ""));
+
+    // Ajout de l'étudiant
+    const response = await studentStore.addStudent(form.value);
+
+    toast.success("Student added successfully!");
+    router.push({ name: "listStudent" });
+  } catch (error) {
+    toast.error("Error while adding the student.");
+  } finally {
+    isLoading.value = false;
   }
-  
-  .form-control {
-    min-width: 300px;
-  }
-  
-  @media (max-width: 768px) {
-    .form-control {
-      width: 100%;
-    }
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.container {
+  max-width: 700px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  min-width: 120px;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875em;
+}
+</style>

@@ -1,4 +1,4 @@
-# Training management 
+# Training management
 
 Ce projet frontend est conçu pour aider les utilisateurs à gérer efficacement leurs activités de formation, qu'il s'agisse de cours, d'ateliers ou de séminaires. Il s'inscrit dans une solution complète visant à centraliser et automatiser la gestion des plannings, des suivis d'apprentissage et des documents associés. L'objectif est de simplifier l'organisation des formations grâce à une planification anticipée, réduisant les risques d'oublis et améliorant la progression des apprenants.
 
@@ -24,10 +24,10 @@ Avant d'installer et d'exécuter ce projet, assurez-vous d'avoir les éléments 
 1. **Cloner le dépôt** :
 
    ```bash
-   git clone 
+   git clone https://github.com/Zoubeir7/training-management.git
    ```
 
-   ```bash 
+   ```bash
    cd training management
    ```
 
@@ -51,6 +51,3 @@ Avant d'installer et d'exécuter ce projet, assurez-vous d'avoir les éléments 
 - **Gestion des Apprenant** : Ajouter, modifier et supprimer des apprenants.
 
 - **Gestion des Payement** : Ajouter, modifier et supprimer des payement.
-
-
-
