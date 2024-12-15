@@ -17,7 +17,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Duration (hours)</th>
+                        <th scope="col">Duration (days)</th>
                         <th scope="col">Price</th>
                         <th scope="col">Actions</th>
                     </tr>
@@ -30,7 +30,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ module.name }}</td>
                         <td>{{ module.duration }}</td>
-                        <td>{{ module.price.toFixed(2) }}</td>
+                        <td>{{ module.price }}</td>
                         <td>
                             <button class="btn btn-sm btn-info me-2" @click="viewModule(module)">
                                 <i class="fa fa-eye"></i>
@@ -78,8 +78,7 @@ const moduleToDelete = ref(null);
 // Load modules on component mount
 onMounted(async () => {
     try {
-        // Initialize store to load data from localStorage or backend
-        store.init();
+        store.init(); // Ensure modules are loaded from storage or backend
     } catch (error) {
         toast.error("Error while loading modules.");
     }
@@ -133,12 +132,6 @@ const deleteModule = async () => {
     text-align: center;
     white-space: nowrap;
     min-width: 100px;
-}
-
-@media (max-width: 768px) {
-    .responsive-hide {
-        display: none;
-    }
 }
 
 .modal-overlay {
