@@ -71,21 +71,6 @@
         </div>
 
         <div class="mb-3">
-          <label for="endDate" class="form-label">End Date</label>
-          <input
-            type="date"
-            id="endDate"
-            v-model="registration.endDate"
-            class="form-control"
-            :class="{ 'is-invalid': errors.endDate }"
-            required
-          />
-          <div v-if="errors.endDate" class="invalid-feedback">
-            {{ errors.endDate }}
-          </div>
-        </div>
-
-        <div class="mb-3">
           <label for="amount" class="form-label">Amount</label>
           <input
             type="number"
@@ -119,7 +104,7 @@
 </template>
   
   <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch, useModel } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import useRegistrationStore from "@/store/registrationStore";
@@ -134,7 +119,6 @@ const registration = ref({
   studentId: "",
   moduleId: "",
   startDate: "",
-  endDate: "",
   amount: "",
 });
 
@@ -143,11 +127,17 @@ const isLoading = ref(false);
 
 const loadData = async () => {
   try {
-    await registrationStore.loadStudents();
-    await registrationStore.loadModules();
-    students.value = registrationStore.students;
-    modules.value = registrationStore.modules;
-    console.log(students.value);
+    // await registrationStore.loadStudents();
+    // await registrationStore.loadModules();
+    const studentsData = await registrationStore.loadStudents()
+    const modulesData = await registrationStore.loadModules()
+    // students.value = registrationStore.students;
+    // modules.value = registrationStore.modules;
+    students.value = studentsData;
+    modules.value = modulesData;
+    console.log("Loaded students:", students.value);
+    console.log("Loaded modules:", modules.value);
+
   } catch (error) {
     toast.error("Failed to load students or modules.");
   }
@@ -169,7 +159,27 @@ const addRegistration = async () => {
   }
 };
 
-onMounted(loadData);
+watch(
+  () => registration.value.moduleId,
+  (newModuleId) => {
+    const selectedModule = modules.value.find((module) => module.id === newModuleId);
+    if (selectedModule) {
+      console.log('Module sélectionné:', selectedModule);
+      registration.value.amount = selectedModule.price;
+    } else {
+      registration.value.amount = "";
+    }
+  }
+);
+
+// onMounted(loadData);
+onMounted(async () => {
+  try {
+    await loadData();
+  } catch (error) {
+    toast.error("Error while loading students.");
+  }
+});
 </script>
   
   <style scoped>
@@ -194,4 +204,3 @@ button {
   font-size: 0.875em;
 }
 </style>
-  

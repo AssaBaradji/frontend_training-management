@@ -21,10 +21,19 @@ export default function useRegistrationStore() {
   };
 
   // Charger la liste des étudiants
+  // const loadStudents = async () => {
+  //   try {
+  //     const response = await axios.get(`${API_BASE_URL}/students`);
+  //     students.value = response.data;
+  //   } catch (error) {
+  //     console.error("Erreur lors du chargement des étudiants :", error);
+  //     throw error;
+  //   }
+  // };
   const loadStudents = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/students`);
-      students.value = response.data;
+      return response.data; // Retournez directement les données
     } catch (error) {
       console.error("Erreur lors du chargement des étudiants :", error);
       throw error;
@@ -35,7 +44,7 @@ export default function useRegistrationStore() {
   const loadModules = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/modules`);
-      modules.value = response.data;
+      return response.data;
     } catch (error) {
       console.error("Erreur lors du chargement des modules :", error);
       throw error;

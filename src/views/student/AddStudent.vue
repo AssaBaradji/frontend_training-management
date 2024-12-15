@@ -92,20 +92,15 @@ const errors = reactive({
   tutor: "",
 });
 
-// États pour la gestion des erreurs
 const isLoading = ref(false);
 
-// Retour à la liste des étudiants
 const navigateBack = () => router.push({ name: "studentList" });
 
-// Soumission du formulaire d'ajout
 const submitForm = async () => {
   try {
     isLoading.value = true;
-    // Réinitialisation des erreurs
     Object.keys(errors).forEach((key) => (errors[key] = ""));
 
-    // Ajout de l'étudiant
     const response = await studentStore.addStudent(form.value);
 
     toast.success("Student added successfully!");

@@ -37,8 +37,10 @@
             :key="registration.id"
           >
             <td>{{ index + 1 }}</td>
-            <td>{{ getStudentName(registration.studentId) }}</td>
-            <td>{{ getModuleName(registration.moduleId) }}</td>
+            <!-- <td>{{ getStudentName(registration.studentId) }}</td>
+            <td>{{ getModuleName(registration.moduleId) }}</td> -->
+            <td>{{registration.studentName }}</td>
+            <td>{{ registration.moduleName }}</td>
             <td>{{ formatDate(registration.startDate) }}</td>
             <td>{{ formatDate(registration.endDate) }}</td>
             <td>{{ registration.amount }} €</td>
