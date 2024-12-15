@@ -5,7 +5,7 @@ import ListStudent from "@/views/student/ListStudent.vue";
 import AddStudent from "../views/student/AddStudent.vue";
 import EditStudent from "../views/student/EditStudent.vue";
 
-import ListModule from "../views/module/ListModule.vue";
+import ListModule from "../views/module/ListMoule.vue";
 import AddModule from "../views/module/AddModule.vue";
 import EditModule from "../views/module/EditModule.vue";
 import ShowModule from "../views/module/ShowModule.vue";
