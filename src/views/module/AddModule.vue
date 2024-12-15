@@ -3,35 +3,57 @@
         <div class="col-md-8 mx-auto">
             <h1 class="h4 text-primary mb-4 text-center">Add New Module</h1>
 
-            <!-- Affichage des erreurs globales du backend -->
-            <div v-if="moduleStore.error" class="alert alert-danger">
-                <p>{{ moduleStore.error }}</p>
+            <!-- Affichage des erreurs globales -->
+            <div v-if="globalError" class="alert alert-danger">
+                <p>{{ globalError }}</p>
             </div>
 
             <form @submit.prevent="submitForm">
                 <!-- Module Name -->
                 <div class="mb-3">
                     <label for="moduleName" class="form-label">Module Name</label>
-                    <input type="text" id="moduleName" v-model="form.name" class="form-control"
-                        :class="{ 'is-invalid': errors.name }" required placeholder="Enter module name" />
+                    <input 
+                        type="text" 
+                        id="moduleName" 
+                        v-model="form.name" 
+                        class="form-control"
+                        :class="{ 'is-invalid': errors.name }" 
+                        required 
+                        placeholder="Enter module name" 
+                    />
                     <div v-if="errors.name" class="invalid-feedback">{{ errors.name }}</div>
                 </div>
 
                 <!-- Duration -->
                 <div class="mb-3">
                     <label for="moduleDuration" class="form-label">Duration (hours)</label>
-                    <input type="number" id="moduleDuration" v-model="form.duration" class="form-control"
-                        :class="{ 'is-invalid': errors.duration }" required min="1"
-                        placeholder="Enter module duration" />
+                    <input 
+                        type="number" 
+                        id="moduleDuration" 
+                        v-model="form.duration" 
+                        class="form-control"
+                        :class="{ 'is-invalid': errors.duration }" 
+                        required 
+                        min="1" 
+                        placeholder="Enter module duration" 
+                    />
                     <div v-if="errors.duration" class="invalid-feedback">{{ errors.duration }}</div>
                 </div>
 
                 <!-- Price -->
                 <div class="mb-3">
                     <label for="modulePrice" class="form-label">Price</label>
-                    <input type="number" id="modulePrice" v-model="form.price" class="form-control"
-                        :class="{ 'is-invalid': errors.price }" required min="0" step="0.01"
-                        placeholder="Enter module price" />
+                    <input 
+                        type="number" 
+                        id="modulePrice" 
+                        v-model="form.price" 
+                        class="form-control"
+                        :class="{ 'is-invalid': errors.price }" 
+                        required 
+                        min="0" 
+                        step="0.01" 
+                        placeholder="Enter module price" 
+                    />
                     <div v-if="errors.price" class="invalid-feedback">{{ errors.price }}</div>
                 </div>
 
@@ -58,43 +80,52 @@ import useModuleStore from "@/store/moduleStore";
 
 // Dépendances
 const router = useRouter();
-const moduleStore = useModuleStore();
 const toast = useToast();
 
+// Store
+const { createModule } = useModuleStore(); // Extraire seulement la méthode createModule
+
 // État local pour le formulaire
-const form = ref({
+const form = reactive({
     name: "",
-    duration: 0,
-    price: 0.0,
+    duration: null,
+    price: null,
 });
 
+// Gestion des erreurs
 const errors = reactive({
     name: "",
     duration: "",
     price: "",
 });
-
-// États pour la gestion des erreurs
+const globalError = ref(null);
 const isLoading = ref(false);
 
-// Retour à la liste des modules
+// Annuler et retourner à la liste
 const cancel = () => router.push({ name: "listModule" });
 
-// Soumission du formulaire d'ajout
+// Soumission du formulaire
 const submitForm = async () => {
-    try {
-        isLoading.value = true;
-        // Réinitialisation des erreurs
-        Object.keys(errors).forEach((key) => (errors[key] = ""));
+    isLoading.value = true;
+    globalError.value = null;
+    Object.keys(errors).forEach((key) => (errors[key] = "")); // Réinitialiser les erreurs
 
-        // Ajout du module
-        await moduleStore.createModule(form.value);
+    try {
+        // Appeler l'action du store
+        await createModule({ ...form });
 
         toast.success("Module added successfully!");
         router.push({ name: "listModule" });
     } catch (error) {
         toast.error("Error while adding module.");
-        // Ici tu peux aussi gérer l'affichage d'erreurs spécifiques venant du backend si nécessaire
+        // Gestion des erreurs du backend
+        if (error.response && error.response.data) {
+            if (error.response.data.errors) {
+                Object.assign(errors, error.response.data.errors); // Assigner les erreurs par champ
+            } else if (error.response.data.message) {
+                globalError.value = error.response.data.message; // Afficher une erreur globale
+            }
+        }
     } finally {
         isLoading.value = false;
     }
