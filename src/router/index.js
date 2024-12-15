@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../Dashbord.vue";
+
 import ListStudent from "@/views/student/ListStudent.vue";
 import AddStudent from "../views/student/AddStudent.vue";
 import EditStudent from "../views/student/EditStudent.vue";
+
 import ListModule from "../views/module/ListModule.vue";
 import AddModule from "../views/module/AddModule.vue";
 import EditModule from "../views/module/EditModule.vue";
@@ -22,9 +24,6 @@ const routes = [
             { path: "Add-Student", name: "AddStudent", component: AddStudent},
             { path: "edit-student/:id", name: "editStudent", component: EditStudent },
             { path: "list-module", name: "listModule", component: ListModule },
-            { path: "Add-module", name: "addModule", component: AddModule },
-            { path: "edit-module/:id", name: "editModule", component: EditModule },
-            { path: "show-module/:id", name: "showModule", component: ShowModule },
 
          
         ],
@@ -33,11 +32,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
 });
 
-
-
 export default router;
-
