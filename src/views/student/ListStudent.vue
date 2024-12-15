@@ -140,10 +140,10 @@ const deleteStudent = async () => {
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  inset-block-end: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -156,8 +156,8 @@ const deleteStudent = async () => {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  max-width: 400px;
-  width: 100%;
+  max-inline-size: 400px;
+  inline-size: 100%;
 }
 
 .modal-buttons .btn {

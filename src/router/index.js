@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../Dashbord.vue";
+
 import ListStudent from "@/views/student/ListStudent.vue";
 import AddStudent from "../views/student/AddStudent.vue";
 import EditStudent from "../views/student/EditStudent.vue";
+
 import ListModule from "../views/module/ListMoule.vue";
 import AddModule from "../views/module/AddModule.vue";
 import EditModule from "../views/module/EditModule.vue";
@@ -36,11 +38,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
 });
 
-
-
 export default router;
-
