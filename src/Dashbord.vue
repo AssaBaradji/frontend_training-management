@@ -28,12 +28,12 @@
         </li>
 
                 <!-- Lien Registrement Payment -->
-                <li class="nav-item mb-3">
+                <!-- <li class="nav-item mb-3">
                     <button class="btn btn-outline-light w-100 text-start" :class="isActive('listPayment')"
                         @click="navigate('listPayment')">
                         <i class="fas fa-wallet fa-lg me-2"></i> Registrement
                     </button>
-                </li>
+                </li> -->
 
                 <li class="nav-item mb-3">
                     <button class="btn btn-outline-light w-100 text-start" :class="isActive('listPayment')"
@@ -42,8 +42,7 @@
                     </button>
                 </li>
 
-            </ul>
-        </aside>
+            
         <!-- Lien Registrement Payment -->
         <li class="nav-item mb-3">
           <button
