@@ -80,6 +80,7 @@ onMounted(async () => {
     try {
         // Initialize store to load data from localStorage or backend
         store.init();
+        await loadModules()
     } catch (error) {
         toast.error("Error while loading modules.");
     }
