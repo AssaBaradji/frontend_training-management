@@ -30,7 +30,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ module.name }}</td>
                         <td>{{ module.duration }}</td>
-                        <td>{{ module.price.toFixed(2) }}</td>
+                        <td>{{ module.price}}</td>
                         <td>
                             <button class="btn btn-sm btn-info me-2" @click="viewModule(module)">
                                 <i class="fa fa-eye"></i>
@@ -80,6 +80,7 @@ onMounted(async () => {
     try {
         // Initialize store to load data from localStorage or backend
         store.init();
+        await loadModules()
     } catch (error) {
         toast.error("Error while loading modules.");
     }

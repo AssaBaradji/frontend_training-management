@@ -7,7 +7,8 @@ import ListModule from "../views/module/ListMoule.vue";
 import AddModule from "../views/module/AddModule.vue";
 import EditModule from "../views/module/EditModule.vue";
 import ShowModule from "../views/module/ShowModule.vue";
-
+import ListPayment from "../views/payements/ListPayment.vue";
+import AddPayment from "../views/payements/AddPayment.vue";
 
 
 const routes = [
@@ -25,6 +26,8 @@ const routes = [
             { path: "Add-module", name: "addModule", component: AddModule },
             { path: "edit-module/:id", name: "editModule", component: EditModule },
             { path: "show-module/:id", name: "showModule", component: ShowModule },
+            { path: "list-payment", name: "listPayment", component: ListPayment },
+            { path: "add-payment", name: "addPayment", component: AddPayment},
 
          
         ],
