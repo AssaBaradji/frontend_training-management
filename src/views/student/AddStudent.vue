@@ -3,59 +3,94 @@
     <div class="col-md-8 mx-auto">
       <h1 class="h4 text-primary mb-4 text-center">Add New Student</h1>
 
-      <!-- Affichage des erreurs globales du backend -->
       <div v-if="studentStore.error" class="alert alert-danger">
         <p>{{ studentStore.error }}</p>
       </div>
 
       <form @submit.prevent="submitForm">
-        <!-- Full Name -->
         <div class="mb-3">
           <label for="fullName" class="form-label">Full Name</label>
-          <input type="text" id="fullName" v-model="form.fullName" class="form-control"
-            :class="{ 'is-invalid': errors.fullName }" required />
-          <div v-if="errors.fullName" class="invalid-feedback">{{ errors.fullName }}</div>
+          <input
+            type="text"
+            id="fullName"
+            v-model="form.fullName"
+            class="form-control"
+            :class="{ 'is-invalid': errors.fullName }"
+            required
+          />
+          <div v-if="errors.fullName" class="invalid-feedback">
+            {{ errors.fullName }}
+          </div>
         </div>
 
-        <!-- Phone Number -->
         <div class="mb-3">
           <label for="phoneNumber" class="form-label">Phone Number</label>
-          <input type="tel" id="phoneNumber" v-model="form.phoneNumber" class="form-control"
-            :class="{ 'is-invalid': errors.phoneNumber }" required />
-          <div v-if="errors.phoneNumber" class="invalid-feedback">{{ errors.phoneNumber }}</div>
+          <input
+            type="tel"
+            id="phoneNumber"
+            v-model="form.phoneNumber"
+            class="form-control"
+            :class="{ 'is-invalid': errors.phoneNumber }"
+            required
+          />
+          <div v-if="errors.phoneNumber" class="invalid-feedback">
+            {{ errors.phoneNumber }}
+          </div>
         </div>
 
-        <!-- Email -->
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" id="email" v-model="form.email" class="form-control"
-            :class="{ 'is-invalid': errors.email }" required />
-          <div v-if="errors.email" class="invalid-feedback">{{ errors.email }}</div>
+          <input
+            type="email"
+            id="email"
+            v-model="form.email"
+            class="form-control"
+            :class="{ 'is-invalid': errors.email }"
+            required
+          />
+          <div v-if="errors.email" class="invalid-feedback">
+            {{ errors.email }}
+          </div>
         </div>
 
-        <!-- Address -->
         <div class="mb-3">
           <label for="address" class="form-label">Address</label>
-          <input type="text" id="address" v-model="form.address" class="form-control"
-            :class="{ 'is-invalid': errors.address }" />
-          <div v-if="errors.address" class="invalid-feedback">{{ errors.address }}</div>
+          <input
+            type="text"
+            id="address"
+            v-model="form.address"
+            class="form-control"
+            :class="{ 'is-invalid': errors.address }"
+          />
+          <div v-if="errors.address" class="invalid-feedback">
+            {{ errors.address }}
+          </div>
         </div>
 
-        <!-- Tutor -->
         <div class="mb-3">
           <label for="tutor" class="form-label">Tutor</label>
-          <input type="text" id="tutor" v-model="form.tutor" class="form-control"
-            :class="{ 'is-invalid': errors.tutor }" />
-          <div v-if="errors.tutor" class="invalid-feedback">{{ errors.tutor }}</div>
+          <input
+            type="text"
+            id="tutor"
+            v-model="form.tutor"
+            class="form-control"
+            :class="{ 'is-invalid': errors.tutor }"
+          />
+          <div v-if="errors.tutor" class="invalid-feedback">
+            {{ errors.tutor }}
+          </div>
         </div>
 
-        <!-- Boutons -->
         <div class="d-flex justify-content-center">
           <button type="submit" class="btn btn-primary" :disabled="isLoading">
             <span v-if="isLoading">Adding...</span>
             <span v-else>Add Student</span>
           </button>
-          <button type="button" class="btn btn-secondary ms-3" @click="navigateBack">
+          <button
+            type="button"
+            class="btn btn-secondary ms-3"
+            @click="navigateBack"
+          >
             Cancel
           </button>
         </div>
@@ -70,12 +105,10 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import useStudentStore from "@/store/studentStore";
 
-// Dépendances
 const router = useRouter();
 const studentStore = useStudentStore();
 const toast = useToast();
 
-// État local pour le formulaire
 const form = ref({
   fullName: "",
   phoneNumber: "",
@@ -94,7 +127,9 @@ const errors = reactive({
 
 const isLoading = ref(false);
 
-const navigateBack = () => router.push({ name: "studentList" });
+const navigateBack = () => {
+  router.push({ name: "listStudent" });
+};
 
 const submitForm = async () => {
   try {
@@ -115,7 +150,7 @@ const submitForm = async () => {
 
 <style scoped>
 .container {
-  max-width: 700px;
+  max-inline-size: 700px;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -123,7 +158,7 @@ const submitForm = async () => {
 }
 
 button {
-  min-width: 120px;
+  min-inline-size: 120px;
 }
 
 .is-invalid {

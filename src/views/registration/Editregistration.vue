@@ -145,6 +145,8 @@ const {
   loadModules,
   updateRegistration: storeUpdateRegistration,
   registrations,
+  students,
+  modules,
 } = useRegistrationStore();
 
 const registration = ref({
@@ -163,12 +165,18 @@ const registrationId = Number(route.params.id);
 
 onMounted(async () => {
   try {
-    await Promise.all([loadRegistrations(), loadStudents(), loadModules()]);
+    await Promise.all([loadStudents(), loadModules(), loadRegistrations()]);
+
     const fetchedRegistration = registrations.value.find(
       (r) => r.id === registrationId
     );
+
     if (fetchedRegistration) {
-      registration.value = { ...fetchedRegistration };
+      registration.value = {
+        ...fetchedRegistration,
+        startDate: formatDate(fetchedRegistration.startDate),
+        endDate: formatDate(fetchedRegistration.endDate),
+      };
     } else {
       toast.error("Registration not found!");
       navigateBack();
@@ -177,6 +185,12 @@ onMounted(async () => {
     errorMessage.value = "Error loading registration data.";
   }
 });
+
+const formatDate = (date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  return d.toISOString().split("T")[0];
+};
 
 const updateRegistration = async () => {
   try {

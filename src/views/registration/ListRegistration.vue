@@ -37,10 +37,8 @@
             :key="registration.id"
           >
             <td>{{ index + 1 }}</td>
-            <!-- <td>{{ getStudentName(registration.studentId) }}</td>
-            <td>{{ getModuleName(registration.moduleId) }}</td> -->
-            <td>{{registration.studentName }}</td>
-            <td>{{ registration.moduleName }}</td>
+            <td>{{ getStudentName(registration.studentId) }}</td>
+            <td>{{ getModuleName(registration.moduleId) }}</td>
             <td>{{ formatDate(registration.startDate) }}</td>
             <td>{{ formatDate(registration.endDate) }}</td>
             <td>{{ registration.amount }} €</td>
@@ -71,6 +69,7 @@
       </table>
     </div>
 
+  
     <div v-if="showModal" class="modal-overlay">
       <div class="modal-content">
         <h5>Confirmation</h5>
@@ -81,6 +80,25 @@
             Delete
           </button>
         </div>
+      </div>
+    </div>
+
+    <div v-if="isModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="font-wb-md mt-3">Registration Details</h5>
+        </div>
+        <div class="tx modal-body">
+          <p><strong>Student Name:</strong> {{ getStudentName(selectedRegistration.studentId) }}</p>
+          <p><strong>Module Name:</strong> {{ getModuleName(selectedRegistration.moduleId) }}</p>
+          <p><strong>Start Date:</strong> {{ formatDate(selectedRegistration.startDate) }}</p>
+          <p><strong>End Date:</strong> {{ formatDate(selectedRegistration.endDate) }}</p>
+          <p><strong>Total Amount:</strong> {{ selectedRegistration.amount }} €</p>
+          <p><strong>Remaining Amount:</strong> {{ selectedRegistration.remainingAmount }} €</p>
+        </div>
+        <button class="btn btn-danger text-white font-wb" @click="closeModalDetails">
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -108,6 +126,10 @@ const {
 const showModal = ref(false);
 const registrationToDelete = ref(null);
 
+
+const isModalVisible = ref(false);
+const selectedRegistration = ref(null);
+
 onMounted(async () => {
   try {
     await Promise.all([loadRegistrations(), loadStudents(), loadModules()]);
@@ -117,16 +139,6 @@ onMounted(async () => {
 });
 
 const formatDate = (date) => new Date(date).toLocaleDateString();
-
-const getStudentName = (studentId) => {
-  const student = students.value.find((s) => s.id === studentId);
-  return student ? student.fullName : "Unknown";
-};
-
-const getModuleName = (moduleId) => {
-  const module = modules.value.find((m) => m.id === moduleId);
-  return module ? module.name : "Unknown";
-};
 
 const navigate = (routeName) => {
   router.push({ name: routeName });
@@ -140,6 +152,10 @@ const confirmDeleteRegistration = (id) => {
 const closeModal = () => {
   showModal.value = false;
   registrationToDelete.value = null;
+};
+
+const editRegistration = (registration) => {
+  router.push({ name: "Editregistration", params: { id: registration.id } });
 };
 
 const deleteRegistration = async () => {
@@ -160,9 +176,56 @@ const deleteRegistration = async () => {
     toast.info("Registration deletion canceled.");
   }
 };
+
+
+const viewRegistration = (registration) => {
+  selectedRegistration.value = registration;
+  isModalVisible.value = true;
+};
+
+
+const closeModalDetails = () => {
+  isModalVisible.value = false;
+};
+onMounted(async () => {
+  try {
+    
+    await Promise.all([loadRegistrations(), loadStudents(), loadModules()]);
+
+    
+    students.value = studentsData;  
+    modules.value = modulesData;  
+
+    console.log("Loaded students:", students.value);
+    console.log("Loaded modules:", modules.value);
+  } catch (error) {
+    // toast.error("Error while loading data.");
+  }
+});
+
+const getStudentName = (studentId) => {
+  const student = students.value.find((s) => s.id === studentId);
+  return student ? student.fullName : "N/A";  
+};
+
+const getModuleName = (moduleId) => {
+  const module = modules.value.find((m) => m.id === moduleId);
+  return module ? module.name : "N/A";  
+};
 </script>
 
 <style scoped>
+.table th,
+.table td {
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tx {
+  text-align: start;
+}
+
 .modal-overlay {
   position: fixed;
   inset-block-start: 0;
@@ -178,10 +241,23 @@ const deleteRegistration = async () => {
 
 .modal-content {
   background: white;
-  padding: 1.5rem;
-  border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 8px;
   text-align: center;
+  inline-size: 80%; 
+  max-inline-size: 500px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
+
+.modal-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-block-end: 1rem;
+}
+
+.modal-body p {
+  margin-block-end: 1rem;
+  text-align: start;
 }
 
 .modal-buttons button {

@@ -127,12 +127,12 @@ const isLoading = ref(false);
 
 const loadData = async () => {
   try {
-    // await registrationStore.loadStudents();
-    // await registrationStore.loadModules();
+    await registrationStore.loadStudents();
+    await registrationStore.loadModules();
     const studentsData = await registrationStore.loadStudents()
     const modulesData = await registrationStore.loadModules()
-    // students.value = registrationStore.students;
-    // modules.value = registrationStore.modules;
+    students.value = registrationStore.students;
+    modules.value = registrationStore.modules;
     students.value = studentsData;
     modules.value = modulesData;
     console.log("Loaded students:", students.value);
@@ -172,7 +172,7 @@ watch(
   }
 );
 
-// onMounted(loadData);
+
 onMounted(async () => {
   try {
     await loadData();

@@ -23,18 +23,18 @@ Avant d'installer et d'exécuter ce projet, assurez-vous d'avoir les éléments 
 
 1. **Cloner le dépôt** :
 
-
    ```bash
    git clone https://github.com/Zoubeir7/training-management.git
    ```
+
 ```bash
    git clone
 ```
 
-   ```bash
+````bash
 ```bash
-   cd training management
-```
+cd training management
+````
 
 2.**Installer les dépendances** :
 
