@@ -15,7 +15,7 @@
             <tr>
               <th>#</th>
               <th>Name</th>
-              <th>Duration (hours)</th>
+              <th>Duration (Days)</th>
               <th>Price</th>
               <th>Actions</th>
             </tr>
@@ -55,7 +55,7 @@
             <p><strong>Name:</strong> {{ selectedModule.name }}</p>
             <p><strong>Duration:</strong> {{ selectedModule.duration }} hours</p>
             <p><strong>Price:</strong> {{ selectedModule.price }} €</p>
-            <p><strong>Description:</strong> {{ selectedModule.description || 'No description available' }}</p>
+            <!-- <p><strong>Description:</strong> {{ selectedModule.description || 'No description available' }}</p> -->
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" @click="closeDetailsModal">Close</button>
