@@ -204,7 +204,7 @@ const submitForm = async () => {
 
 <style scoped>
 .container {
-  max-width: 700px;
+  max-inline-size: 700px;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -212,7 +212,7 @@ const submitForm = async () => {
 }
 
 button {
-  min-width: 120px;
+  min-inline-size: 120px;
 }
 
 .is-invalid {

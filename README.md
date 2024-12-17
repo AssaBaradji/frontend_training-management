@@ -23,12 +23,12 @@ Avant d'installer et d'exécuter ce projet, assurez-vous d'avoir les éléments 
 
 1. **Cloner le dépôt** :
 
-   ```bash
-   git clone https://github.com/Zoubeir7/training-management.git
-   ```
+```bash
+git clone https://github.com/AssaBaradji/training-management.git
+```
 
 ```bash
-   git clone
+git clone
 ```
 
 ````bash
@@ -39,13 +39,13 @@ cd training management
 2.**Installer les dépendances** :
 
 ```bash
-   npm install training management
+npm install training-management
 ```
 
 3.**Lancer le serveur de développement** :
 
 ```bash
-   npm run dev
+npm run dev
 ```
 
 ## Fonctionnalités
@@ -57,3 +57,7 @@ cd training management
 - **Gestion des Apprenant** : Ajouter, modifier et supprimer des apprenants.
 
 - **Gestion des Payement** : Ajouter et supprimer des payement.
+
+## Auteur
+
+[Assa Baradji](https://github.com/AssaBaradji)
