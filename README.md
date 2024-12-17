@@ -56,4 +56,4 @@ cd training management
 
 - **Gestion des Apprenant** : Ajouter, modifier et supprimer des apprenants.
 
-- **Gestion des Payement** : Ajouter, modifier et supprimer des payement.
+- **Gestion des Payement** : Ajouter et supprimer des payement.

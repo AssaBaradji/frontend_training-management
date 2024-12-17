@@ -51,11 +51,33 @@
           <div v-if="errors.paymentMode" class="invalid-feedback">{{ errors.paymentMode }}</div>
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label for="registration" class="form-label">Registration</label>
           <input type="number" id="registration" v-model="form.registrationId" class="form-control"
             :class="{ 'is-invalid': errors.registrationId }" />
           <div v-if="errors.registrationId" class="invalid-feedback">{{ errors.registrationId }}</div>
+        </div> -->
+        <div class="mb-3">
+          <label for="registration" class="form-label">Registration</label>
+          <select
+            id="registration"
+            v-model="form.registrationId"
+            class="form-select"
+            :class="{ 'is-invalid': errors.registrationId }"
+            required
+          >
+            <option disabled value="">Select a registration</option>
+            <option
+              v-for="registration in registrations"
+              :key="registration.id"
+              :value="registration.id"
+            >
+              {{ registration.id }}
+            </option>
+          </select>
+          <div v-if="errors.registrationId" class="invalid-feedback">
+            {{ errors.registrationId }}
+          </div>
         </div>
 
         <div class="d-flex justify-content-center">
@@ -73,18 +95,21 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 // import useStudentStore from "@/store/studentStore";
 import usePaymentStore from "../../store/paymentStore";
+// import useRegistrationStore from "../../store/registrationStore";
 
+// const registrationStore = useRegistrationStore()
 
 // Dépendances
 const router = useRouter();
 const paymentStore = usePaymentStore();
 const toast = useToast();
 
+const registrations = ref([]);
 // État local pour le formulaire
 const form = ref({
   paymentDate: "",
@@ -104,6 +129,24 @@ const errors = reactive({
   registrationId: "",
 });
 
+const loadData = async () => {
+  try {
+    await paymentStore.loadRegistrations();
+    const registrationsData = await paymentStore.loadRegistrations()
+    registrations.value = registrationsData;
+    console.log("Loaded registration:", registrations.value);
+
+  } catch (error) {
+    toast.error("Failed to load registrations.");
+  }
+};
+onMounted(async () => {
+  try {
+    await loadData();
+  } catch (error) {
+    toast.error("Error while loading students.");
+  }
+});
 const isLoading = ref(false);
 
 const navigate = (routeName) => {

@@ -17,7 +17,7 @@
             <th scope="col">Payment Date</th>
             <th scope="col">Amount</th>
             <th scope="col">Payer</th>
-            <th scope="col">PayerNumber</th>
+            <th scope="col">Payer Number</th>
             <th scope="col">Payment Mode</th>
             <th scope="col">Actions</th>
           </tr>
