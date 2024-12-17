@@ -2,34 +2,69 @@
   <div>
     <h4 class="mb-4">Edit Module</h4>
 
-    <div v-if="isLoading" class="text-center">
-      <p>Loading...</p>
+    <div v-if="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
     </div>
-    <div v-else class="form-container shadow-sm rounded bg-white p-4">
-      <form @submit.prevent="submitForm">
+
+    <div class="shadow-sm rounded bg-white p-4">
+      <form @submit.prevent="updateModule">
         <div class="mb-3">
-          <label for="name" class="form-label">Module Name</label>
-          <input type="text" id="name" v-model="form.name" class="form-control" placeholder="Enter module name"
-            required />
+          <label for="name" class="form-label fw-bold">Module Name</label>
+          <input
+            type="text"
+            id="name"
+            v-model="module.name"
+            class="form-control"
+            :class="{ 'is-invalid': errors.name }"
+            required
+          />
+          <div v-if="errors.name" class="invalid-feedback">
+            {{ errors.name }}
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="duration" class="form-label">Duration (hours)</label>
-          <input type="number" id="duration" v-model="form.duration" class="form-control" placeholder="Enter duration"
-            required />
+          <label for="duration" class="form-label fw-bold">Duration (in hours)</label>
+          <input
+            type="number"
+            id="duration"
+            v-model="module.duration"
+            class="form-control"
+            :class="{ 'is-invalid': errors.duration }"
+            required
+          />
+          <div v-if="errors.duration" class="invalid-feedback">
+            {{ errors.duration }}
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="price" class="form-label">Price</label>
-          <input type="number" id="price" v-model="form.price" class="form-control" placeholder="Enter price"
-            required />
+          <label for="price" class="form-label fw-bold">Price</label>
+          <input
+            type="number"
+            id="price"
+            v-model="module.price"
+            class="form-control"
+            :class="{ 'is-invalid': errors.price }"
+            required
+          />
+          <div v-if="errors.price" class="invalid-feedback">
+            {{ errors.price }}
+          </div>
         </div>
 
-        <div class="text-end">
-          <button type="button" class="btn btn-secondary me-2" @click="cancel">
+        <div class="d-flex justify-content-end">
+          <button
+            type="button"
+            class="btn btn-secondary me-2"
+            @click="navigateBack"
+          >
             Cancel
           </button>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary" :disabled="isLoading">
+            <span v-if="isLoading">Saving...</span>
+            <span v-else>Save Changes</span>
+          </button>
         </div>
       </form>
     </div>
@@ -37,63 +72,131 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
-import useModuleStore from "@/store/moduleStore";
+import useModuleStore from "../../store/moduleStore.js";
 
-const toast = useToast();
 const router = useRouter();
 const route = useRoute();
-const { getModuleById, updateModule } = useModuleStore();
+const toast = useToast();
+const {
+  loadModules,
+  updateModule: storeUpdateModule,
+  modules,
+} = useModuleStore();
 
-const form = ref({
+const module = ref({
   name: "",
-  duration: "",
-  price: "",
+  duration: 0,
+  price: 0,
 });
 
-const isLoading = ref(true);
-const moduleId = route.params.id;
+const errors = reactive({ name: "", duration: "", price: "" });
+const isLoading = ref(false);
+const errorMessage = ref("");
+const moduleId = Number(route.params.id);
 
 onMounted(async () => {
   try {
-    const module = await getModuleById(moduleId);
-    if (module) {
-      form.value = { ...module };
+    await loadModules();
+
+    const fetchedModule = modules.value.find((m) => m.id === moduleId);
+
+    if (fetchedModule) {
+      module.value = { ...fetchedModule };
     } else {
-      toast.error("Module not found.");
-      router.push({ name: "moduleList" });
+      toast.error("Module not found!");
+      navigateBack();
     }
   } catch (error) {
-    toast.error("Error while loading module details.");
-  } finally {
-    isLoading.value = false;
+    errorMessage.value = "Error loading module data.";
   }
 });
 
-const submitForm = async () => {
+const validateForm = () => {
+  let isValid = true;
+
+ 
+  resetErrors();
+
+  
+  if (!module.value.name) {
+    errors.name = "Module name is required.";
+    isValid = false;
+  }
+
+
+  if (!module.value.duration || module.value.duration <= 0) {
+    errors.duration = "Duration must be a positive number.";
+    isValid = false;
+  }
+
+
+  if (!module.value.price || module.value.price <= 0) {
+    errors.price = "Price must be a positive number.";
+    isValid = false;
+  }
+
+  return isValid;
+};
+
+const updateModule = async () => {
   try {
-    await updateModule(moduleId, form.value);
+    isLoading.value = true;
+    resetErrors();
+
+    
+    if (!validateForm()) {
+      return; 
+    }
+
+    await storeUpdateModule(moduleId, module.value);
     toast.success("Module updated successfully!");
-    router.push({ name: "moduleList" });
+    navigateBack();
   } catch (error) {
-    toast.error("Error while updating module.");
+    if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach((err) => {
+        if (err.path === "name") {
+          errors.name = err.msg;
+        } else if (err.path === "duration") {
+          errors.duration = err.msg;
+        } else if (err.path === "price") {
+          errors.price = err.msg;
+        }
+      });
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+  } finally {
+    isLoading.value = false;
   }
 };
 
-const cancel = () => {
-  router.push({ name: "moduleList" });
+const resetErrors = () => {
+  Object.keys(errors).forEach((key) => (errors[key] = ""));
+};
+
+const navigateBack = () => {
+  router.push({ name: "listModule" });
 };
 </script>
 
 <style scoped>
-.form-container {
-  max-inline-size: 600px;
-  margin: 0 auto;
+.form-label {
+  font-weight: 600;
 }
 
-.form-label {
-  font-weight: bold;
+.shadow-sm {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
 }
 </style>
