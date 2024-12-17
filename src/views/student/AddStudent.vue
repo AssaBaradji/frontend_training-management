@@ -130,8 +130,21 @@ const isLoading = ref(false);
 const navigateBack = () => {
   router.push({ name: "listStudent" });
 };
-
+const validatePhone = () => {
+  const phoneRegex = /^[0-9\s]*$/; 
+  if (!phoneRegex.test(phoneNumber.value)) {
+    errors.phoneNumber = "Phone must be a number ";
+  } else if(phoneNumber.value.length > 15) {
+    errors.phoneNumber = "Phone cannot be most 15 chractere long";
+  } else{
+    errors.phoneNumber = "";
+  }
+};
 const submitForm = async () => {
+  validatePhone();
+  if (errors.phoneNumber) {
+    return; 
+  }
   try {
     isLoading.value = true;
     Object.keys(errors).forEach((key) => (errors[key] = ""));
@@ -141,7 +154,23 @@ const submitForm = async () => {
     toast.success("Student added successfully!");
     router.push({ name: "listStudent" });
   } catch (error) {
-    toast.error("Error while adding the student.");
+    if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach(err => {
+        if (err.path === "fullName") {
+          errors.fullName = err.msg; 
+        } else if (err.path == "phoneNumber") {
+          errors.phoneNumber = err.msg;
+        } else if (err.path == "email") {
+          errors.email = err.msg;
+        } else if (err.path == "address") {
+          errors.address = err.msg;
+        } else if(err.path == "tutor") {
+          errors.tutor = err.msg;
+        }
+      });
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
   } finally {
     isLoading.value = false;
   }

@@ -34,7 +34,7 @@
             <td>{{ student.address }}</td>
             <td>{{ student.tutor || "N/A" }}</td>
             <td>
-              <button class="btn btn-sm btn-info me-2" @click="viewStudent(student)">
+              <button class="btn btn-sm btn-info me-2" @click="openModal(student)">
                 <i class="fa fa-eye"></i>
               </button>
               <button class="btn btn-sm btn-warning me-2" @click="editStudent(student, index)">
@@ -59,6 +59,28 @@
           <button class="btn btn-danger" @click="deleteStudent">Delete</button>
         </div>
       </div>
+    </div>
+
+    <div v-if="isModalVisible" class="modal-overlay d-flex" id="modal-overlay " @click="closeModale">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h5 class="font-wb-md mt-3">Details Student</h5>
+        </div>
+        <div class="tx modal-body">
+          <p>
+            <strong>Name: </strong> {{ selectedStudent.fullName }}
+          </p>
+          <p>
+            <strong>Phone Number: </strong> {{ selectedStudent.phoneNumber }}
+          </p>
+          <p>
+            <strong>Tutor: </strong> {{ selectedStudent.tutor }}
+          </p>
+        <button class="closebtn btn btn-danger text-white font-wb" @click="closeModale">
+          Close
+        </button>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -121,6 +143,18 @@ const deleteStudent = async () => {
     closeModal();
   }
 };
+
+const isModalVisible = ref(false);
+const selectedStudent = ref(null);
+
+const openModal = (student) => {
+  selectedStudent.value = student;
+  isModalVisible.value = true;
+};
+
+const closeModale = () => {
+  isModalVisible.value = false;
+};
 </script>
 
 <style scoped>
@@ -162,5 +196,38 @@ const deleteStudent = async () => {
 
 .modal-buttons .btn {
   margin: 0 10px;
+}
+.tx{
+  text-align: start;
+}
+#modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#modal-content {
+  background: white;
+  padding: 20px;
+  padding-top: 5px;
+  border-radius: 8px;
+  max-width: 300px;
+  position: relative;
+}
+#modal-body {
+  padding: 20px;
+}
+.closebtn{
+  width: 100%;
+}
+.font-wb-md{
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 </style>
