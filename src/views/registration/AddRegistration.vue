@@ -122,7 +122,12 @@ const registration = ref({
   amount: "",
 });
 
-const errors = reactive({});
+const errors = reactive({
+  studentId: "",
+  moduleId: "",
+  startDate: "",
+  amount: "",
+});
 const isLoading = ref(false);
 
 const loadData = async () => {
@@ -153,7 +158,17 @@ const addRegistration = async () => {
     toast.success("Registration added successfully!");
     router.push({ name: "listRegistration" });
   } catch (error) {
-    toast.error("Error while adding the registration.");
+    if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach(err => {
+        if (err.path === "amount") {
+          errors.amount = err.msg; 
+        } else {
+          errors.general = err.msg;
+        }
+      });
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
   } finally {
     isLoading.value = false;
   }

@@ -17,7 +17,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="duration" class="form-label">Duration (hours)</label>
+          <label for="duration" class="form-label">Duration (days)</label>
           <input
             type="number"
             id="duration"

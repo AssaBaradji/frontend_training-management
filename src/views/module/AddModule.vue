@@ -26,7 +26,7 @@
 
                 
                 <div class="mb-3">
-                    <label for="moduleDuration" class="form-label">Duration (hours)</label>
+                    <label for="moduleDuration" class="form-label">Duration (days)</label>
                     <input 
                         type="number" 
                         id="moduleDuration" 
@@ -116,15 +116,15 @@ const submitForm = async () => {
         toast.success("Module added successfully!");
         router.push({ name: "listModule" });
     } catch (error) {
-        toast.error("Error while adding module.");
-       
-        if (error.response && error.response.data) {
-            if (error.response.data.errors) {
-                Object.assign(errors, error.response.data.errors); 
-            } else if (error.response.data.message) {
-                globalError.value = error.response.data.message; 
-            }
+        if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach(err => {
+        if (err.path === "name") {
+          errors.name = err.msg; 
         }
+      });
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
     } finally {
         isLoading.value = false;
     }
