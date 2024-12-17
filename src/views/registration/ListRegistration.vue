@@ -89,6 +89,7 @@
           <h5 class="font-wb-md mt-3">Registration Details</h5>
         </div>
         <div class="tx modal-body">
+          <p><strong>ID:</strong> {{ selectedRegistration.id }}</p>
           <p><strong>Student Name:</strong> {{ getStudentName(selectedRegistration.studentId) }}</p>
           <p><strong>Module Name:</strong> {{ getModuleName(selectedRegistration.moduleId) }}</p>
           <p><strong>Start Date:</strong> {{ formatDate(selectedRegistration.startDate) }}</p>

@@ -53,7 +53,7 @@
           </div>
           <div class="modal-body">
             <p><strong>Name:</strong> {{ selectedModule.name }}</p>
-            <p><strong>Duration:</strong> {{ selectedModule.duration }} hours</p>
+            <p><strong>Duration:</strong> {{ selectedModule.duration }} day(s)</p>
             <p><strong>Price:</strong> {{ selectedModule.price }} €</p>
             <!-- <p><strong>Description:</strong> {{ selectedModule.description || 'No description available' }}</p> -->
           </div>

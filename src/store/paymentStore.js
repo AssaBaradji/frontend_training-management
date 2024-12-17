@@ -5,7 +5,7 @@ const API_BASE_URL = "http://localhost:3005/api";
 
 export default function usePaymentStore() {
   const payments = ref([]);
-
+  const registrations = ref([]);
   const loadPayement = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/payements`);
@@ -15,7 +15,16 @@ export default function usePaymentStore() {
       throw error;
     }
   };
-
+  const loadRegistrations = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/inscriptions`);
+      registrations.value = response.data;
+      return registrations.value;
+    } catch (error) {
+      console.error("Erreur lors du chargement des inscriptions :", error);
+      throw error;
+    }
+  };
   const addPayment = async (paymentData) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/payements`, paymentData);
@@ -56,6 +65,7 @@ export default function usePaymentStore() {
     loadPayement,
     addPayment,
     updatePayment,
-    deletePayment
+    deletePayment,
+    loadRegistrations
   };
 }
