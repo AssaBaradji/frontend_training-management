@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ref } from "vue";
 
-const API_BASE_URL = "http://localhost:3004/api";
+const API_BASE_URL = "http://localhost:3005/api";
 
 export default function usePaymentStore() {
   const payments = ref([]);
