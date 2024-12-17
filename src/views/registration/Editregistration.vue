@@ -95,23 +95,6 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="remainingAmount" class="form-label fw-bold"
-            >Remaining Amount</label
-          >
-          <input
-            type="number"
-            id="remainingAmount"
-            v-model="registration.remainingAmount"
-            class="form-control"
-            :class="{ 'is-invalid': errors.remainingAmount }"
-            required
-          />
-          <div v-if="errors.remainingAmount" class="invalid-feedback">
-            {{ errors.remainingAmount }}
-          </div>
-        </div>
-
         <div class="d-flex justify-content-end">
           <button
             type="button"
@@ -155,10 +138,9 @@ const registration = ref({
   startDate: "",
   endDate: "",
   amount: "",
-  remainingAmount: "",
 });
 
-const errors = reactive({});
+const errors = reactive({amount: "",});
 const isLoading = ref(false);
 const errorMessage = ref("");
 const registrationId = Number(route.params.id);
@@ -201,9 +183,16 @@ const updateRegistration = async () => {
     toast.success("Registration updated successfully!");
     navigateBack();
   } catch (error) {
-    toast.error("Failed to update registration.");
-    if (error.response?.data?.errors) {
-      Object.assign(errors, error.response.data.errors);
+    if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach(err => {
+        if (err.path === "amount") {
+          errors.amount = err.msg; 
+        } else {
+          errors.general = err.msg;
+        }
+      });
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
     }
   } finally {
     isLoading.value = false;

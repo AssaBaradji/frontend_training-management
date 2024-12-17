@@ -45,12 +45,18 @@
                 <div class="mb-3">
                     <label for="address" class="form-label fw-bold">Address</label>
                     <input type="text" id="address" v-model="student.address" class="form-control" />
+                    <div v-if="errors.address" class="invalid-feedback">
+                        {{ errors.address }}
+                    </div>
                 </div>
 
                 <!-- Tutor -->
                 <div class="mb-3">
                     <label for="tutor" class="form-label fw-bold">Tutor</label>
                     <input type="text" id="tutor" v-model="student.tutor" class="form-control" />
+                    <div v-if="errors.tutor" class="invalid-feedback">
+                        {{ errors.tutor }}
+                    </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -86,7 +92,13 @@ const student = ref({
     address: "",
     tutor: "",
 });
-const errors = reactive({});
+const errors = reactive({
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    address: "",
+    tutor: "",
+});
 const isLoading = ref(false);
 const errorMessage = ref("");
 const studentId = Number(route.params.id); // Convertit en nombre
@@ -106,8 +118,22 @@ onMounted(async () => {
     }
 });
 
+const validatePhone = () => {
+  const phoneRegex = /^[0-9\s]*$/; 
+  if (!phoneRegex.test(phoneNumber.value)) {
+    errors.phoneNumber = "Phone must be a number ";
+  } else if(phoneNumber.value.length > 15) {
+    errors.phoneNumber = "Phone cannot be most 15 chractere long";
+  } else{
+    errors.phoneNumber = "";
+  }
+};
 // Update Student
 const updateStudent = async () => {
+    validatePhone()
+    if (errors.phoneNumber) {
+        return; 
+    }
     try {
         isLoading.value = true;
         resetErrors();
@@ -116,10 +142,23 @@ const updateStudent = async () => {
         toast.success("Student updated successfully!");
         navigateBack();
     } catch (error) {
-        toast.error("Failed to update student.");
-        if (error.response?.data?.errors) {
-            Object.assign(errors, error.response.data.errors);
+        if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach(err => {
+        if (err.path === "fullName") {
+          errors.fullName = err.msg; 
+        } else if (err.path == "phoneNumber") {
+          errors.phoneNumber = err.msg;
+        } else if (err.path == "email") {
+          errors.email = err.msg;
+        } else if (err.path == "address") {
+          errors.address = err.msg;
+        } else if(err.path == "tutor") {
+          errors.tutor = err.msg;
         }
+      });
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
     } finally {
         isLoading.value = false;
     }

@@ -104,22 +104,31 @@ const errors = reactive({
   registrationId: "",
 });
 
-// États pour la gestion des erreurs
 const isLoading = ref(false);
 
-// Retour à la liste des étudiants
 const navigate = (routeName) => {
     router.push({ name: routeName });
 };
-// Soumission du formulaire d'ajout
+
+const validatePhone = () => {
+  const phoneRegex = /^[0-9\s]*$/; 
+  if (!phoneRegex.test(payerNumber.value)) {
+    errors.payerNumber = "Phone must be a number ";
+  } else if(payerNumber.value.length > 15) {
+    errors.payerNumber = "Phone cannot be most 15 chractere long";
+  } else{
+    errors.payerNumber = "";
+  }
+};
 const submitForm = async () => {
+  validatePhone()
+  if (errors.payerNumber) {
+    return; 
+  }
   try {
     isLoading.value = true;
-    // Réinitialisation des erreurs
     Object.keys(errors).forEach((key) => (errors[key] = ""));
 
-    // Ajout de l'étudiant
-    // const response = await studentStore.addStudent(form.value);
     const response = await paymentStore.addPayment(form.value);
 
     toast.success("Student added successfully!");
@@ -133,6 +142,8 @@ const submitForm = async () => {
           errors.payer = err.msg;
         } else if (err.path == "paymentMode") {
           errors.paymentMode = err.msg;
+        } else if (err.path == "payerNumber") {
+          errors.payerNumber = err.msg;
         } else if (err.path == "registrationId") {
           errors.registrationId = err.msg;
         } else {

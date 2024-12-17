@@ -216,4 +216,8 @@ const closeModale = () => {
 #modal-body {
   padding: 20px;
 }
+.font-wb-md{
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 </style>

@@ -159,11 +159,11 @@ const editRegistration = (registration) => {
 };
 
 const deleteRegistration = async () => {
-  const isConfirmed = window.confirm(
-    "Are you sure you want to delete this registration?"
-  );
+  // const isConfirmed = window.confirm(
+  //   "Are you sure you want to delete this registration?"
+  // );
 
-  if (isConfirmed) {
+  // if (isConfirmed) {
     try {
       await storeDeleteRegistration(registrationToDelete.value);
       toast.success("Registration deleted successfully!");
@@ -172,9 +172,9 @@ const deleteRegistration = async () => {
     } finally {
       closeModal();
     }
-  } else {
-    toast.info("Registration deletion canceled.");
-  }
+  // } else {
+  //   toast.info("Registration deletion canceled.");
+  // }
 };
 
 
