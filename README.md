@@ -24,7 +24,7 @@ Avant d'installer et d'exécuter ce projet, assurez-vous d'avoir les éléments 
 1. **Cloner le dépôt** :
 
 ```bash
-git clone https://github.com/AssaBaradji/training-management.git
+git clone https://github.com/AssaBaradji/frontend_training-management.git
 ```
 
 ```bash
@@ -33,7 +33,7 @@ git clone
 
 ````bash
 ```bash
-cd training management
+cd frontend_training_management
 ````
 
 2.**Installer les dépendances** :
