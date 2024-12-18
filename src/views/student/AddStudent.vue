@@ -17,6 +17,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors.fullName }"
             required
+            placeholder="Enter the student's full name"
           />
           <div v-if="errors.fullName" class="invalid-feedback">
             {{ errors.fullName }}
@@ -32,6 +33,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors.phoneNumber }"
             required
+            placeholder="Enter the phone number"
           />
           <div v-if="errors.phoneNumber" class="invalid-feedback">
             {{ errors.phoneNumber }}
@@ -47,6 +49,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors.email }"
             required
+            placeholder="Enter the student's email"
           />
           <div v-if="errors.email" class="invalid-feedback">
             {{ errors.email }}
@@ -61,6 +64,7 @@
             v-model="form.address"
             class="form-control"
             :class="{ 'is-invalid': errors.address }"
+            placeholder="Enter the address"
           />
           <div v-if="errors.address" class="invalid-feedback">
             {{ errors.address }}
@@ -75,6 +79,7 @@
             v-model="form.tutor"
             class="form-control"
             :class="{ 'is-invalid': errors.tutor }"
+            placeholder="Enter the tutor's name"
           />
           <div v-if="errors.tutor" class="invalid-feedback">
             {{ errors.tutor }}
@@ -98,6 +103,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, reactive } from "vue";

@@ -27,7 +27,10 @@ export default function usePaymentStore() {
   };
   const addPayment = async (paymentData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/payements`, paymentData);
+      const response = await axios.post(
+        `${API_BASE_URL}/payements`,
+        paymentData
+      );
       payments.value.push(response.data);
     } catch (error) {
       console.error("Erreur lors de l'ajout de payement :", error);
@@ -35,11 +38,13 @@ export default function usePaymentStore() {
     }
   };
 
-  // Mettre à jour un étudiant existant
   const updatePayment = async (id, updatedData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/payements/${id}`, updatedData);
-      // Mise à jour des données locales après succès
+      const response = await axios.put(
+        `${API_BASE_URL}/payements/${id}`,
+        updatedData
+      );
+
       const index = payments.value.findIndex((payement) => payement.id === id);
       if (index !== -1) {
         payments.value[index] = { ...response.data };
@@ -66,6 +71,6 @@ export default function usePaymentStore() {
     addPayment,
     updatePayment,
     deletePayment,
-    loadRegistrations
+    loadRegistrations,
   };
 }

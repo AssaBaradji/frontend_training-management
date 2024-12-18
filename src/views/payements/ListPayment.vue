@@ -1,16 +1,19 @@
 <template>
   <div>
-    <!-- Add Student Button -->
     <h4 class="mb-4">Payments List</h4>
     <div class="text-end mb-4">
-      <button class="btn btn-primary btn-sm me-3 fw-bold" @click="navigate('addPayment')">
+      <button
+        class="btn btn-primary btn-sm me-3 fw-bold"
+        @click="navigate('addPayment')"
+      >
         <i class="fa fa-plus me-1"></i> Add Payment
       </button>
     </div>
 
-    <!-- Student Table -->
     <div class="table-responsive shadow-sm rounded bg-white p-3 mt-3">
-      <table class="table table-hover table-borderless align-middle text-center">
+      <table
+        class="table table-hover table-borderless align-middle text-center"
+      >
         <thead class="table-light small-header">
           <tr>
             <th scope="col">#</th>
@@ -28,16 +31,22 @@
           </tr>
           <tr v-for="(payment, index) in payments" :key="payment.id">
             <td>{{ index + 1 }}</td>
-            <td>{{ new Date(payment.payment_date).toLocaleDateString()}}</td>
+            <td>{{ new Date(payment.payment_date).toLocaleDateString() }}</td>
             <td>{{ payment.amount }}</td>
             <td>{{ payment.payer }}</td>
             <td>{{ payment.payer_number }}</td>
             <td>{{ payment.payment_mode }}</td>
             <td>
-              <button class="btn btn-sm btn-info me-2" @click="openModal(payment)">
+              <button
+                class="btn btn-sm btn-info me-2"
+                @click="openModal(payment)"
+              >
                 <i class="fa fa-eye"></i>
               </button>
-              <button class="btn btn-sm btn-danger" @click="confirmDeletePayment(payment.id)">
+              <button
+                class="btn btn-sm btn-danger"
+                @click="confirmDeletePayment(payment.id)"
+              >
                 <i class="fa fa-trash"></i>
               </button>
             </td>
@@ -46,7 +55,6 @@
       </table>
     </div>
 
-    <!-- Confirmation Modal -->
     <div v-if="showModal" class="modal-overlay">
       <div class="modal-content">
         <h5>Confirmation</h5>
@@ -59,30 +67,32 @@
     </div>
   </div>
 
-  <div v-if="isModalVisible" class="modal-overlay d-flex" id="modal-overlay " @click="closeModale">
-      <div class="modal-content" @click.stop>
-        <div class="modal-header">
-          <h5 class="font-wb-md mt-3">Details Payement</h5>
-        </div>
-        <div class="tx modal-body">
-          <p>
-            <strong>Registration: </strong> {{ selectedPayment.registration_id }}
-          </p>
-          <p>
-            <strong>Remaining Amount: </strong> {{ selectedPayment.remainingAmount }}
-          </p>
-          <p>
-            <strong>Student: </strong> {{ selectedPayment.student_name }}
-          </p>
-          <p>
-            <strong>Module: </strong> {{ selectedPayment.module_name }}
-          </p>
-        </div>
-        <button class="btn btn-danger text-white font-wb" @click="closeModale">
-          Close
-        </button>
+  <div
+    v-if="isModalVisible"
+    class="modal-overlay d-flex"
+    id="modal-overlay "
+    @click="closeModale"
+  >
+    <div class="modal-content" @click.stop>
+      <div class="modal-header">
+        <h5 class="font-wb-md mt-3">Details Payement</h5>
       </div>
+      <div class="tx modal-body">
+        <p>
+          <strong>Registration: </strong> {{ selectedPayment.registration_id }}
+        </p>
+        <p>
+          <strong>Remaining Amount: </strong>
+          {{ selectedPayment.remainingAmount }}
+        </p>
+        <p><strong>Student: </strong> {{ selectedPayment.student_name }}</p>
+        <p><strong>Module: </strong> {{ selectedPayment.module_name }}</p>
+      </div>
+      <button class="btn btn-danger text-white font-wb" @click="closeModale">
+        Close
+      </button>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -91,10 +101,13 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import usePaymentStore from "../../store/paymentStore";
 
-
 const router = useRouter();
 const toast = useToast();
-const { payments, loadPayement, deletePayment: storeDeletePayment } = usePaymentStore();
+const {
+  payments,
+  loadPayement,
+  deletePayment: storeDeletePayment,
+} = usePaymentStore();
 
 const showModal = ref(false);
 const paymentToDelete = ref(null);
@@ -110,7 +123,6 @@ onMounted(async () => {
 const navigate = (routeName) => {
   router.push({ name: routeName });
 };
-
 
 const confirmDeletePayment = (id) => {
   paymentToDelete.value = id;
@@ -133,8 +145,6 @@ const deletePayment = async () => {
   }
 };
 
-
-
 const isModalVisible = ref(false);
 const selectedPayment = ref(null);
 
@@ -154,10 +164,10 @@ const closeModale = () => {
   vertical-align: middle;
   text-align: center;
   white-space: nowrap;
-  min-width: 100px;
+  min-inline-size: 100px;
 }
 
-.tx{
+.tx {
   text-align: start;
 }
 @media (max-width: 768px) {
@@ -168,10 +178,10 @@ const closeModale = () => {
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  inset-block-end: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -184,21 +194,20 @@ const closeModale = () => {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  max-width: 400px;
-  width: 100%;
+  max-inline-size: 400px;
+  inline-size: 100%;
 }
 
 .modal-buttons .btn {
   margin: 0 10px;
 }
 
-
 #modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -208,16 +217,16 @@ const closeModale = () => {
 #modal-content {
   background: white;
   padding: 20px;
-  padding-top: 5px;
+  padding-block-start: 5px;
   border-radius: 8px;
-  max-width: 300px;
+  max-inline-size: 300px;
   position: relative;
 }
 #modal-body {
   padding: 20px;
 }
-.font-wb-md{
+.font-wb-md {
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-block-end: 20px;
 }
 </style>

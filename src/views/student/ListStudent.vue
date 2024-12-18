@@ -1,16 +1,19 @@
 <template>
   <div>
-    <!-- Add Student Button -->
     <h4 class="mb-4">Student List</h4>
     <div class="text-end mb-4">
-      <button class="btn btn-primary btn-sm me-3 fw-bold" @click="navigate('AddStudent')">
+      <button
+        class="btn btn-primary btn-sm me-3 fw-bold"
+        @click="navigate('AddStudent')"
+      >
         <i class="fa fa-plus me-1"></i> Add Student
       </button>
     </div>
 
-    <!-- Student Table -->
     <div class="table-responsive shadow-sm rounded bg-white p-3 mt-3">
-      <table class="table table-hover table-borderless align-middle text-center">
+      <table
+        class="table table-hover table-borderless align-middle text-center"
+      >
         <thead class="table-light small-header">
           <tr>
             <th scope="col">#</th>
@@ -34,13 +37,22 @@
             <td>{{ student.address }}</td>
             <td>{{ student.tutor || "N/A" }}</td>
             <td>
-              <button class="btn btn-sm btn-info me-2" @click="openModal(student)">
+              <button
+                class="btn btn-sm btn-info me-2"
+                @click="openModal(student)"
+              >
                 <i class="fa fa-eye"></i>
               </button>
-              <button class="btn btn-sm btn-warning me-2" @click="editStudent(student, index)">
+              <button
+                class="btn btn-sm btn-warning me-2"
+                @click="editStudent(student, index)"
+              >
                 <i class="fa fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-danger" @click="confirmDeleteStudent(student.id)">
+              <button
+                class="btn btn-sm btn-danger"
+                @click="confirmDeleteStudent(student.id)"
+              >
                 <i class="fa fa-trash"></i>
               </button>
             </td>
@@ -49,7 +61,6 @@
       </table>
     </div>
 
-    <!-- Confirmation Modal -->
     <div v-if="showModal" class="modal-overlay">
       <div class="modal-content">
         <h5>Confirmation</h5>
@@ -61,26 +72,30 @@
       </div>
     </div>
 
-    <div v-if="isModalVisible" class="modal-overlay d-flex" id="modal-overlay " @click="closeModale">
+    <div
+      v-if="isModalVisible"
+      class="modal-overlay d-flex"
+      id="modal-overlay "
+      @click="closeModale"
+    >
       <div class="modal-content" @click.stop>
         <div class="modal-header">
           <h5 class="font-wb-md mt-3">Details Student</h5>
         </div>
         <div class="tx modal-body">
-          <p>
-            <strong>Name: </strong> {{ selectedStudent.fullName }}
-          </p>
+          <p><strong>Name: </strong> {{ selectedStudent.fullName }}</p>
           <p>
             <strong>Phone Number: </strong> {{ selectedStudent.phoneNumber }}
           </p>
-          <p>
-            <strong>Tutor: </strong> {{ selectedStudent.tutor }}
-          </p>
-        <button class="closebtn btn btn-danger text-white font-wb" @click="closeModale">
-          Close
-        </button>
+          <p><strong>Tutor: </strong> {{ selectedStudent.tutor }}</p>
+          <button
+            class="closebtn btn btn-danger text-white font-wb"
+            @click="closeModale"
+          >
+            Close
+          </button>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -93,12 +108,15 @@ import useStudentStore from "@/store/studentStore";
 
 const router = useRouter();
 const toast = useToast();
-const { students, loadStudents, deleteStudent: storeDeleteStudent } = useStudentStore();
+const {
+  students,
+  loadStudents,
+  deleteStudent: storeDeleteStudent,
+} = useStudentStore();
 
 const showModal = ref(false);
 const studentToDelete = ref(null);
 
-// Load students on component mount
 onMounted(async () => {
   try {
     await loadStudents();
@@ -107,22 +125,18 @@ onMounted(async () => {
   }
 });
 
-// Navigation
 const navigate = (routeName) => {
   router.push({ name: routeName });
 };
 
-// View a student
 const viewStudent = (student) => {
   router.push({ name: "viewStudent", params: { id: student.id } });
 };
 
-// Edit a student
 const editStudent = (student) => {
   router.push({ name: "editStudent", params: { id: student.id } });
 };
 
-// Delete a student
 const confirmDeleteStudent = (id) => {
   studentToDelete.value = id;
   showModal.value = true;
@@ -163,7 +177,7 @@ const closeModale = () => {
   vertical-align: middle;
   text-align: center;
   white-space: nowrap;
-  min-width: 100px;
+  min-inline-size: 100px;
 }
 
 @media (max-width: 768px) {
@@ -197,15 +211,15 @@ const closeModale = () => {
 .modal-buttons .btn {
   margin: 0 10px;
 }
-.tx{
+.tx {
   text-align: start;
 }
 #modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -215,19 +229,19 @@ const closeModale = () => {
 #modal-content {
   background: white;
   padding: 20px;
-  padding-top: 5px;
+  padding-block-start: 5px;
   border-radius: 8px;
-  max-width: 300px;
+  max-inline-size: 300px;
   position: relative;
 }
 #modal-body {
   padding: 20px;
 }
-.closebtn{
-  width: 100%;
+.closebtn {
+  inline-size: 100%;
 }
-.font-wb-md{
+.font-wb-md {
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-block-end: 20px;
 }
 </style>

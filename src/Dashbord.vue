@@ -1,11 +1,7 @@
 <template>
   <div class="d-flex">
-    <!-- Sidebar -->
     <aside class="sidebar bg-primary p-3 text-white">
-      <!-- Profil utilisateur -->
-
       <ul class="nav flex-column text-small">
-        <!-- Lien Student -->
         <li class="nav-item mb-3">
           <button
             class="btn btn-outline-light w-100 text-start"
@@ -16,7 +12,6 @@
           </button>
         </li>
 
-        <!-- Lien Module -->
         <li class="nav-item mb-3">
           <button
             class="btn btn-outline-light w-100 text-start"
@@ -27,23 +22,16 @@
           </button>
         </li>
 
-                <!-- Lien Registrement Payment -->
-                <!-- <li class="nav-item mb-3">
-                    <button class="btn btn-outline-light w-100 text-start" :class="isActive('listPayment')"
-                        @click="navigate('listPayment')">
-                        <i class="fas fa-wallet fa-lg me-2"></i> Registrement
-                    </button>
-                </li> -->
+        <li class="nav-item mb-3">
+          <button
+            class="btn btn-outline-light w-100 text-start"
+            :class="isActive('listPayment')"
+            @click="navigate('listPayment')"
+          >
+            <i class="fas fa-check-circle me-2"></i> Payment
+          </button>
+        </li>
 
-                <li class="nav-item mb-3">
-                    <button class="btn btn-outline-light w-100 text-start" :class="isActive('listPayment')"
-                        @click="navigate('listPayment')">
-                        <i class="fas fa-check-circle me-2"></i> Payment
-                    </button>
-                </li>
-
-            
-        <!-- Lien Registrement Payment -->
         <li class="nav-item mb-3">
           <button
             class="btn btn-outline-light w-100 text-start"
@@ -56,17 +44,13 @@
       </ul>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content flex-grow-1 p-4">
       <header
         class="d-flex justify-content-end align-items-center mb-4"
       ></header>
 
-      <div class="row mb-4">
-        <!-- Exemple de widgets pour le tableau de bord -->
-      </div>
+      <div class="row mb-4"></div>
 
-      <!-- Le contenu principal change en fonction de la route -->
       <router-view />
     </main>
   </div>
@@ -80,21 +64,18 @@ import { onMounted } from "vue";
 const router = useRouter();
 const route = useRoute();
 
-// Fonction de navigation vers la route
 const navigate = (routeName) => {
   router.push({ name: routeName });
 };
 
 onMounted(async () => {});
 
-// Fonction pour vérifier si la route est active
 const isActive = (routeName) => {
   return route.name === routeName ? "active" : "";
 };
 </script>
 
 <style scoped>
-/* Styles de la mise en page */
 .d-flex {
   display: flex;
 }

@@ -6,7 +6,6 @@ const API_BASE_URL = "http://localhost:3005/api";
 export default function useStudentStore() {
   const students = ref([]);
 
-  // Charger la liste des étudiants
   const loadStudents = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/students`);
@@ -17,10 +16,12 @@ export default function useStudentStore() {
     }
   };
 
-  // Ajouter un nouvel étudiant
   const addStudent = async (studentData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/students`, studentData);
+      const response = await axios.post(
+        `${API_BASE_URL}/students`,
+        studentData
+      );
       students.value.push(response.data);
     } catch (error) {
       console.error("Erreur lors de l'ajout de l'étudiant :", error);
@@ -28,11 +29,13 @@ export default function useStudentStore() {
     }
   };
 
-  // Mettre à jour un étudiant existant
   const updateStudent = async (id, updatedData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/students/${id}`, updatedData);
-      // Mise à jour des données locales après succès
+      const response = await axios.put(
+        `${API_BASE_URL}/students/${id}`,
+        updatedData
+      );
+
       const index = students.value.findIndex((student) => student.id === id);
       if (index !== -1) {
         students.value[index] = { ...response.data };
@@ -43,7 +46,6 @@ export default function useStudentStore() {
     }
   };
 
-  // Supprimer un étudiant
   const deleteStudent = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/students/${id}`);

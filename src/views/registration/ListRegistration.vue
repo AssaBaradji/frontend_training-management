@@ -69,7 +69,6 @@
       </table>
     </div>
 
-  
     <div v-if="showModal" class="modal-overlay">
       <div class="modal-content">
         <h5>Confirmation</h5>
@@ -90,14 +89,34 @@
         </div>
         <div class="tx modal-body">
           <p><strong>ID:</strong> {{ selectedRegistration.id }}</p>
-          <p><strong>Student Name:</strong> {{ getStudentName(selectedRegistration.studentId) }}</p>
-          <p><strong>Module Name:</strong> {{ getModuleName(selectedRegistration.moduleId) }}</p>
-          <p><strong>Start Date:</strong> {{ formatDate(selectedRegistration.startDate) }}</p>
-          <p><strong>End Date:</strong> {{ formatDate(selectedRegistration.endDate) }}</p>
-          <p><strong>Total Amount:</strong> {{ selectedRegistration.amount }} €</p>
-          <p><strong>Remaining Amount:</strong> {{ selectedRegistration.remainingAmount }} €</p>
+          <p>
+            <strong>Student Name:</strong>
+            {{ getStudentName(selectedRegistration.studentId) }}
+          </p>
+          <p>
+            <strong>Module Name:</strong>
+            {{ getModuleName(selectedRegistration.moduleId) }}
+          </p>
+          <p>
+            <strong>Start Date:</strong>
+            {{ formatDate(selectedRegistration.startDate) }}
+          </p>
+          <p>
+            <strong>End Date:</strong>
+            {{ formatDate(selectedRegistration.endDate) }}
+          </p>
+          <p>
+            <strong>Total Amount:</strong> {{ selectedRegistration.amount }} €
+          </p>
+          <p>
+            <strong>Remaining Amount:</strong>
+            {{ selectedRegistration.remainingAmount }} €
+          </p>
         </div>
-        <button class="btn btn-danger text-white font-wb" @click="closeModalDetails">
+        <button
+          class="btn btn-danger text-white font-wb"
+          @click="closeModalDetails"
+        >
           Close
         </button>
       </div>
@@ -126,7 +145,6 @@ const {
 
 const showModal = ref(false);
 const registrationToDelete = ref(null);
-
 
 const isModalVisible = ref(false);
 const selectedRegistration = ref(null);
@@ -160,58 +178,44 @@ const editRegistration = (registration) => {
 };
 
 const deleteRegistration = async () => {
-  // const isConfirmed = window.confirm(
-  //   "Are you sure you want to delete this registration?"
-  // );
-
-  // if (isConfirmed) {
-    try {
-      await storeDeleteRegistration(registrationToDelete.value);
-      toast.success("Registration deleted successfully!");
-    } catch (error) {
-      toast.error("Error while deleting the registration.");
-    } finally {
-      closeModal();
-    }
-  // } else {
-  //   toast.info("Registration deletion canceled.");
-  // }
+  try {
+    await storeDeleteRegistration(registrationToDelete.value);
+    toast.success("Registration deleted successfully!");
+  } catch (error) {
+    toast.error("Error while deleting the registration.");
+  } finally {
+    closeModal();
+  }
 };
-
 
 const viewRegistration = (registration) => {
   selectedRegistration.value = registration;
   isModalVisible.value = true;
 };
 
-
 const closeModalDetails = () => {
   isModalVisible.value = false;
 };
 onMounted(async () => {
   try {
-    
     await Promise.all([loadRegistrations(), loadStudents(), loadModules()]);
 
-    
-    students.value = studentsData;  
-    modules.value = modulesData;  
+    students.value = studentsData;
+    modules.value = modulesData;
 
     console.log("Loaded students:", students.value);
     console.log("Loaded modules:", modules.value);
-  } catch (error) {
-    // toast.error("Error while loading data.");
-  }
+  } catch (error) {}
 });
 
 const getStudentName = (studentId) => {
   const student = students.value.find((s) => s.id === studentId);
-  return student ? student.fullName : "N/A";  
+  return student ? student.fullName : "N/A";
 };
 
 const getModuleName = (moduleId) => {
   const module = modules.value.find((m) => m.id === moduleId);
-  return module ? module.name : "N/A";  
+  return module ? module.name : "N/A";
 };
 </script>
 
@@ -245,9 +249,9 @@ const getModuleName = (moduleId) => {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  inline-size: 80%; 
-  max-inline-size: 500px; 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+  inline-size: 80%;
+  max-inline-size: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
